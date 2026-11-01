@@ -17,5 +17,13 @@ public class App {
         }
 
         System.out.println("The CSV File exists.");
+
+        Product product = new Product("001", "Mouse", 100.00, 1);
+        Product product2 = new Product("002", "Keyboard", 150.00, 2);
+        Product product3 = new Product("003", "TV", 200.00, 3);
+
+        System.out.println(product);
+        System.out.println(product2);
+        System.out.println(product3);
     }
 }
