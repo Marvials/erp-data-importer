@@ -1,7 +1,12 @@
 package io.github.marvials;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
@@ -19,24 +24,30 @@ public class App {
 
         System.out.println("The CSV File exists.");
 
-        Product product = new Product("001", "Mouse", 100.00, 1);
-        Product product2 = new Product("002", "Keyboard", 150.00, 2);
-        Product product3 = new Product("003", "TV", 200.00, 3);
-
         ArrayList<Product> products = new ArrayList<Product>();
 
-        products.add(product);
-        products.add(product2);
-        products.add(product3);
+        try (LineNumberReader reader = new LineNumberReader(new FileReader(CSVFile))) {
+            System.out.println("CSV file opened successfully.");
 
-        Product productByCode = getProductByCode(products, "005");
+            String line;
+            
+            while ((line = reader.readLine()) != null) {
+                if(reader.getLineNumber() == 1) {
+                    continue;
+                }
 
-        if (productByCode == null) {
-            System.out.println("No product found with the specified code.");
-            return;
+
+                String[] fields = line.split(";");
+
+                Product product = new Product(fields[0], fields[1], Double.parseDouble(fields[2]), Integer.parseInt(fields[3]));
+
+                System.out.println(product);
+            }
+
+        } catch (IOException e) {
+            System.err.println("An error occurred while opening the CSV file.");
+            e.printStackTrace();
         }
-
-        System.out.println("Product found: " + productByCode);
 
     }
 
